@@ -1,10 +1,13 @@
 package edu.umb.cs681.hw01;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Car {
 	private String make;
@@ -222,6 +225,13 @@ public class Car {
     	if(minLowDC.isPresent()) {
     		System.out.println("Min Domination Count in Low:"+minLowDC.get());
     	}
+    	System.out.println("================================================================");
+    	Map<Boolean, List<Car>> HighCostcars = CarsList.stream().collect(Collectors.partitioningBy((Car car)->car.getPrice()>200000));
+    	List<Float> minLowwPrice = CarsList.stream().map((Car car)->car.getPrice()).collect(Collectors.toList());
+    	Map<Boolean, List<Float>> minsss = minLowwPrice.stream().collect(Collectors.partitioningBy((Float price)->price>200000));
+    	//Stream<String> highcars= ((Collection<Car>) HighCostcars).stream().map((Car car)->car.getMake());
+    	System.out.println(minsss);
+
     	
 	}
 }
