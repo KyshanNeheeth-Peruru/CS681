@@ -152,40 +152,23 @@ public class Car {
     	ArrayList<Car> orderByMileage=(ArrayList<Car>) CarsList.stream().sorted(Comparator.comparing((Car car)-> car.getMileage())).collect(Collectors.toList());
     	orderByMileage.forEach(car -> System.out.print(car.getMake()));
     	System.out.println();
+    	Map<Boolean, Map<String, Integer>> mileageCars = CarsList.stream().collect(Collectors.partitioningBy((Car car)->car.getMileage()>55,Collectors.toMap((Car car)->car.getMake(), (Car car)->car.getMileage())));
+    	System.out.println("High Cars and low cars with threshold of mileage 55:");
+    	System.out.println(mileageCars);
     	
-    	ArrayList<Car> HighmilCars =(ArrayList<Car>) CarsList.stream().filter((Car car)-> car.getMileage()>55).collect(Collectors.toList());
-    	int countHighMilCars = (int) HighmilCars.stream().count();
-    	System.out.println("Number of High Mileage cars(>55):"+countHighMilCars);
-    	ArrayList<Car> LowMilCars =(ArrayList<Car>) CarsList.stream().filter((Car car)-> car.getMileage()<55).collect(Collectors.toList());
-    	int countLowMilCars = (int) LowMilCars.stream().count();
-    	System.out.println("Number of Low Mileafe cars(<55):"+countLowMilCars);
+    	Map<Boolean, Integer> MileageCarsMax = CarsList.stream().collect(Collectors.partitioningBy(car -> car.getMileage() > 55,Collectors.collectingAndThen(Collectors.maxBy(Comparator.comparingInt(Car::getMileage)),maxCar -> maxCar.map(Car::getMileage).orElse(0))));
+    	System.out.println("Maximum in each group:");
+    	System.out.println(MileageCarsMax);
+    	Map<Boolean, Integer> MileageCarsMin = CarsList.stream().collect(Collectors.partitioningBy(car -> car.getMileage() > 55,Collectors.collectingAndThen(Collectors.minBy(Comparator.comparingInt(Car::getMileage)),minCar -> minCar.map(Car::getMileage).orElse(0))));
+    	System.out.println("Minimum in each group:");
+    	System.out.println(MileageCarsMin);
     	
-    	Integer sumHighMiles = HighmilCars.stream().map((Car car)->car.getMileage()).reduce(0,(sum,miles)-> sum+miles);
-    	int avgHighMiles= sumHighMiles/countHighMilCars;
-    	System.out.println("Average of High Mileages:"+avgHighMiles);
-    	
-    	Integer sumLowMiles = LowMilCars.stream().map((Car car)->car.getMileage()).reduce(0,(sum,miles)-> sum+miles);
-    	int avgLowMiles= sumLowMiles/countLowMilCars;
-    	System.out.println("Average of Low Mileages:"+avgLowMiles);
-       	
-    	Optional<Integer> maxHighMileage = HighmilCars.stream().map((Car car)->car.getMileage()).max(Comparator.comparing(mile->mile));
-    	if(maxHighMileage.isPresent()) {
-    		System.out.println("Max Mileage in High:"+maxHighMileage.get());
-    	}
-    	Optional<Integer> minHighMileage = HighmilCars.stream().map((Car car)->car.getMileage()).min(Comparator.comparing(mile->mile));
-    	if(minHighMileage.isPresent()) {
-    		System.out.println("Min Mileage in High:"+minHighMileage.get());
-    	}
-    	Optional<Integer> maxLowMileage = LowMilCars.stream().map((Car car)->car.getMileage()).max(Comparator.comparing(mile->mile));
-    	if(maxLowMileage.isPresent()) {
-    		System.out.println("Max Mileage in Low:"+maxLowMileage.get());
-    	}
-    	Optional<Integer> minLowMileage = LowMilCars.stream().map((Car car)->car.getMileage()).min(Comparator.comparing(mile->mile));
-    	if(minLowMileage.isPresent()) {
-    		System.out.println("Min Mileage in Low:"+minLowMileage.get());
-    	}
-    	
-    	
+    	Map<Boolean, Double> averageMileageofCars = CarsList.stream().collect(Collectors.partitioningBy(car -> car.getMileage() > 55,Collectors.averagingDouble(Car::getMileage)));
+    	System.out.println("Average in each group:");
+    	System.out.println(averageMileageofCars);
+    	Map<Boolean, Long> countofMileageCars = CarsList.stream().collect(Collectors.partitioningBy(car -> car.getMileage() > 55,Collectors.counting()));
+    	System.out.println("Count of cars in each group:");
+    	System.out.println(countofMileageCars);
     	
     	System.out.println("================================================================================");
     	
@@ -225,12 +208,6 @@ public class Car {
     	if(minLowDC.isPresent()) {
     		System.out.println("Min Domination Count in Low:"+minLowDC.get());
     	}
-    	System.out.println("================================================================");
-    	Map<Boolean, List<Car>> HighCostcars = CarsList.stream().collect(Collectors.partitioningBy((Car car)->car.getPrice()>200000));
-    	List<Float> minLowwPrice = CarsList.stream().map((Car car)->car.getPrice()).collect(Collectors.toList());
-    	Map<Boolean, List<Float>> minsss = minLowwPrice.stream().collect(Collectors.partitioningBy((Float price)->price>200000));
-    	//Stream<String> highcars= ((Collection<Car>) HighCostcars).stream().map((Car car)->car.getMake());
-    	System.out.println(minsss);
 
     	
 	}
