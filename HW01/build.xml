@@ -16,19 +16,19 @@
     <target name="compile" depends="init">
         <javac srcdir="${src}" destdir="${bin}" includeAntRuntime="no">
             <classpath refid="classpath"/>
-            <include name="edu/umb/cs681/Car.java"/>
+            <include name="edu/umb/cs681/hw01/Car.java"/>
         </javac>
     </target>
 
     <target name="run" depends="compile">
-        <java classname="edu.umb.cs681.Car"
+        <java classname="edu.umb.cs681.hw01.Car"
               classpathref="classpath"
               fork="true"/>
     </target>
 
     <target name="clean" depends="run">
         <delete includeemptydirs="true">
-            <fileset dir="${bin}/edu/umb/cs681/" includes="*/"/>
+            <fileset dir="${bin}/edu/umb/cs681/hw01" includes="*/"/>
         </delete>
     </target>
 
