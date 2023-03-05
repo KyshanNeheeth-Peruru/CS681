@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<project name="hw04" basedir="."  default="clean">
+    <property environment="env"/>
+
+    <property name="src" location="src" />
+    <property name="bin" location="bin" />
+
+    <path id="classpath">
+        <pathelement location="bin" />
+    </path>
+
+    <target name="init">
+        <mkdir dir="${bin}"/>
+    </target>
+
+    <target name="compile" depends="init">
+        <javac srcdir="${src}" destdir="${bin}" includeAntRuntime="no">
+            <classpath refid="classpath"/>
+            <include name="edu/umb/cs681/hw04/Housing.java"/>
+        </javac>
+    </target>
+
+    <target name="run" depends="compile">
+        <java classname="edu.umb.cs681.hw04.Housing"
+              classpathref="classpath"
+              fork="true"/>
+    </target>
+
+    <target name="clean" depends="run">
+        <delete includeemptydirs="true">
+            <fileset dir="${bin}/edu/umb/cs681/hw04" includes="*/"/>
+        </delete>
+    </target>
+
+</project>
