@@ -18,7 +18,7 @@ public class DJIAWkSummaryObservable extends Observable<DSummary> {
 	        {
 	            List<List<Double>> csv = 
 	            		lines.map(line -> {
-	            			//System.out.println(Stream.of(line.split(",")).map(value->Double.parseDouble(value.substring(0,7))).collect(Collectors.toList()));
+	            			System.out.println(Stream.of(line.split(",")).map(value->Double.parseDouble(value.substring(0,7))).collect(Collectors.toList()));
 	            			return Stream.of(line.split(",")).map(value->Double.parseDouble(value.substring(0,7))).collect(Collectors.toList());
 	            		}).collect(Collectors.toList());
 	            DJIAWkSummaryObservable observable = new DJIAWkSummaryObservable();
