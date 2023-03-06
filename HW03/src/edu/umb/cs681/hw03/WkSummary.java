@@ -2,7 +2,7 @@ package edu.umb.cs681.hw03;
 
 public class WkSummary extends Summary {
 	public WkSummary(double open, double high, double low, double close) {
-        super(open, close, high, low);
+        super(open, high, low, close);
     }
 	
 	public void update(DSummary dSummary) {

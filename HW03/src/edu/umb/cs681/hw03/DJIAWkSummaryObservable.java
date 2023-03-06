@@ -16,20 +16,32 @@ public class DJIAWkSummaryObservable extends Observable<DSummary> {
 	        Path path = Paths.get("C:\\Users\\kisha\\Downloads\\HistoricalPrices.csv");
 	        try (Stream<String> lines = Files.lines(path))
 	        {
-	            List<List<Double>> csv = 
-	            		lines.map(line -> {
-	            			System.out.println(Stream.of(line.split(",")).map(value->Double.parseDouble(value.substring(0,7))).collect(Collectors.toList()));
-	            			return Stream.of(line.split(",")).map(value->Double.parseDouble(value.substring(0,7))).collect(Collectors.toList());
-	            		}).collect(Collectors.toList());
-	            DJIAWkSummaryObservable observable = new DJIAWkSummaryObservable();
-	            for (List<Double> c : csv) 
-	            {
-	            	//System.out.println(c.get(3));
-	            	DSummary ds = new DSummary(c.get(0),c.get(1),c.get(2),c.get(3));
-	            	observable.addSummary(ds); 
-	            }
+	             
+	        	List<List<Double>> csv = lines.skip(1)
+	                    .map(line -> Stream.of(line.split(",")).skip(1)
+	                            .map(value -> Double.parseDouble(value.trim()))
+	                            .collect(Collectors.toList()))
+	                    .collect(Collectors.toList());
+	        	
+	        	DJIAWkSummaryObservable ob = new DJIAWkSummaryObservable();
+	        	CandleStickObserver cso = new CandleStickObserver();
+	        	ob.addObserver(cso);
+	        	
+	        	DSummary dsum1=new DSummary(csv.get(0).get(0),csv.get(0).get(1),csv.get(0).get(2),csv.get(0).get(3));
+	        	DSummary dsum2=new DSummary(csv.get(1).get(0),csv.get(1).get(1),csv.get(1).get(2),csv.get(1).get(3));
+	        	DSummary dsum3=new DSummary(csv.get(2).get(0),csv.get(2).get(1),csv.get(2).get(2),csv.get(2).get(3));
+	        	DSummary dsum4=new DSummary(csv.get(3).get(0),csv.get(3).get(1),csv.get(3).get(2),csv.get(3).get(3));
+	        	DSummary dsum5=new DSummary(csv.get(4).get(0),csv.get(4).get(1),csv.get(4).get(2),csv.get(4).get(3));
+	        	
+	        	ob.addSummary(dsum1);
+	        	ob.addSummary(dsum2);
+	        	ob.addSummary(dsum3);
+	        	ob.addSummary(dsum4);
+	        	ob.addSummary(dsum5);
+ 
 	        } catch (Exception ex) {
-	            ex.printStackTrace();
+	        	System.out.println("Csv file not Found");
+	            //ex.printStackTrace();
 	        }
 	    }
 
