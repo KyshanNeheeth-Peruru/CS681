@@ -11,7 +11,7 @@ import java.util.stream.Stream;
 public class Thread4 implements Runnable {
 	
 	public void run(){
-		Path path = Paths.get("C:\\Users\\kisha\\Downloads\\bos-housing.csv");
+		Path path = Paths.get("bos-housing.csv");
 		
 		try (Stream<String> lines = Files.lines(path)) 
         {
@@ -23,7 +23,7 @@ public class Thread4 implements Runnable {
             					.collect(Collectors.toList());})
             		.collect(Collectors.toList());
             		
-            System.out.println("Data Processing #4=====================");
+            System.out.println("=====================Data Processing #4=====================");
     		
     		long countDP4 = matrix.stream().skip(1).filter(line -> Double.parseDouble(line.get(6)) < 50 &&
     				Integer.parseInt(line.get(3)) == 1).count();

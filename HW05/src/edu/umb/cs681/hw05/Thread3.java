@@ -12,7 +12,7 @@ public class Thread3 implements Runnable {
 	
 	public void run(){
 		
-		Path path = Paths.get("C:\\Users\\kisha\\Downloads\\bos-housing.csv");
+		Path path = Paths.get("bos-housing.csv");
 		
 		try (Stream<String> lines = Files.lines(path)) 
         {
@@ -24,7 +24,7 @@ public class Thread3 implements Runnable {
             					.collect(Collectors.toList());})
             		.collect(Collectors.toList());
             		
-    		System.out.println("Data Processing #3=====================");
+    		System.out.println("=====================Data Processing #3=====================");
     		
     		long countDP3 = matrix.stream().skip(1).filter(line -> Double.parseDouble(line.get(8)) >= 4 &&
                     Double.parseDouble(line.get(13)) < 20).count();

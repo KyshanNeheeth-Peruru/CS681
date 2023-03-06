@@ -11,7 +11,7 @@ import java.util.stream.Stream;
 public class Thread1 implements Runnable {
 	
 	public void run(){
-		Path path = Paths.get("C:\\Users\\kisha\\Downloads\\bos-housing.csv");
+		Path path = Paths.get("bos-housing.csv");
 		
 		try (Stream<String> lines = Files.lines(path)) 
         {
@@ -23,7 +23,7 @@ public class Thread1 implements Runnable {
             					.collect(Collectors.toList());})
             		.collect(Collectors.toList());
             		
-            		System.out.println("Data Processing #1=====================");
+            		System.out.println("=====================Data Processing #1=====================");
             		long countChas = matrix.stream().skip(1).filter((List<String> line)-> Integer.parseInt(line.get(3)) == 1).count();
             		System.out.println("Number of Houses near Charles River:"+countChas);
             		double maxpriceChas = matrix.stream().skip(1).filter(line -> Integer.parseInt(line.get(3)) == 1).mapToDouble(line -> Double.parseDouble(line.get(13))).max().orElse(Double.NaN);

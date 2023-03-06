@@ -12,7 +12,7 @@ public class Thread2 implements Runnable {
 	
 	public void run(){
 		
-		Path path = Paths.get("C:\\Users\\kisha\\Downloads\\bos-housing.csv");
+		Path path = Paths.get("bos-housing.csv");
 		
 		try (Stream<String> lines = Files.lines(path)) 
         {
@@ -24,7 +24,7 @@ public class Thread2 implements Runnable {
             					.collect(Collectors.toList());})
             		.collect(Collectors.toList());
             		
-    		System.out.println("Data Processing #2=====================");
+    		System.out.println("=====================Data Processing #2=====================");
     		List<String> crims = matrix.stream().skip(1).map(row -> Double.parseDouble(row.get(0))).map(Object::toString).sorted().collect(Collectors.toList());
     		int crim10index = (int) Math.ceil(0.1 * crims.size()) - 1;
     		double crims10thPercentile = Double.parseDouble(crims.get(crim10index));

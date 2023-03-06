@@ -13,7 +13,7 @@ public class DJIAWkSummaryObservable extends Observable<DSummary> {
 	 }
 	 
 	 public static void main(String[] args) {
-	        Path path = Paths.get("C:\\Users\\kisha\\Downloads\\HistoricalPrices.csv");
+	        Path path = Paths.get("HistoricalPrices.csv");
 	        try (Stream<String> lines = Files.lines(path))
 	        {
 	             

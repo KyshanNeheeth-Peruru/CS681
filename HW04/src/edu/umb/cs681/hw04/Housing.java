@@ -11,7 +11,7 @@ import java.util.stream.Stream;
 
 public class Housing {
 	public static void main(String[] args) {
-		Path path = Paths.get("C:\\Users\\kisha\\Downloads\\bos-housing.csv");
+		Path path = Paths.get("bos-housing.csv");
         
         try (Stream<String> lines = Files.lines(path)) 
         {
