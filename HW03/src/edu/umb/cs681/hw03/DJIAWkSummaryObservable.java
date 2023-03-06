@@ -40,8 +40,7 @@ public class DJIAWkSummaryObservable extends Observable<DSummary> {
 	        	ob.addSummary(dsum5);
  
 	        } catch (Exception ex) {
-	        	System.out.println("Csv file not Found");
-	        	
+	        	System.out.println("Csv file not Found");        	
 	            //ex.printStackTrace();
 	        }
 	    }

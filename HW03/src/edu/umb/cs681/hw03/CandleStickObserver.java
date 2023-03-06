@@ -17,13 +17,9 @@ public class CandleStickObserver implements Observer<DSummary> {
         System.out.println("Open:"+event.getopen()+"\nHigh:"+event.gethigh()+"\nLow:"+event.getlow()+"\nClose:"+event.getclose());
     
         
-        if (DSummaries.size() == 5) {
-            double open = DSummaries.get(0).getopen();
-            double high = DSummaries.stream().mapToDouble(summary -> summary.gethigh()).max().orElse(0.0);
-            double low = DSummaries.stream().mapToDouble(summary -> summary.getlow()).min().orElse(0.0);
-            double close = DSummaries.get(DSummaries.size() - 1).getclose();
-            WkSummary wksum = new WkSummary(open, high, low, close);
-            System.out.println("===================Weekly summary added====================");
+        if (DSummaries.size() == 5) {   
+            WkSummary wksum = new WkSummary(DSummaries.get(0).getopen(),DSummaries.stream().mapToDouble(summary -> summary.gethigh()).max().orElse(0.0),DSummaries.stream().mapToDouble(summary -> summary.getlow()).min().orElse(0.0),DSummaries.get(DSummaries.size()-1).getclose());
+            System.out.println("===================Weekly summary==========================");
             System.out.println("Open:"+wksum.getopen()+"\nHigh:"+wksum.gethigh()+"\nLow:"+wksum.getlow()+"\nClose:"+wksum.getclose());
             System.out.println("===========================================================");
             DSummaries.clear();
