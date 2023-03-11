@@ -72,13 +72,23 @@ public class Car {
     	CarsList.forEach(car -> car.setDominationCount(CarsList));
     	//CarsList.forEach(car -> System.out.println(car.getDominationCount()));
     	
-    	double averagePrice = CarsList.stream().map(car->car.getPrice()).reduce(new CarPriceResultHolder(),
-    			(result, price)-> {
-    				result.accumulate(price);
-    				return result;
-    				},(finalResult, intermediateResult)-> {
-    					finalResult.combine(intermediateResult);return finalResult;
-    					}).getaverage();
-        System.out.println("Average of all cars:"+averagePrice);	
+		/*
+		 * double averagePrice = CarsList.stream().map(car->car.getPrice()).reduce(new
+		 * CarPriceResultHolder(), (result, price)-> { result.accumulate(price); return
+		 * result; },(finalResult, intermediateResult)-> {
+		 * finalResult.combine(intermediateResult);return finalResult; }).getaverage();
+		 */
+    	
+    	CarPriceResultHolder resultHolder = CarsList.stream()
+                .map(car -> car.getPrice())
+                .reduce(new CarPriceResultHolder(), (result, price) -> {
+                            result.accumulate(price);
+                            return result;
+                        },(finalResult, intermediateResult) -> {
+                            finalResult.combine(intermediateResult);
+                            return finalResult;
+                        });    	
+    	
+        System.out.println("Average of all cars:"+resultHolder.getaverage());	
 	}
 }

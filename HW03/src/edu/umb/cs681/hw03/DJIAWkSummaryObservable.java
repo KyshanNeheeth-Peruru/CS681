@@ -3,13 +3,14 @@ package edu.umb.cs681.hw03;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class DJIAWkSummaryObservable extends Observable<DSummary> {
-	 public void addSummary(DSummary dSummary) {
-	        notifyObservers(dSummary);
+public class DJIAWkSummaryObservable extends Observable<WkSummary> {
+	 public void addSummary(WkSummary wksum) {
+	        notifyObservers(wksum);
 	 }
 	 
 	 public static void main(String[] args) {
@@ -23,21 +24,24 @@ public class DJIAWkSummaryObservable extends Observable<DSummary> {
 	                            .collect(Collectors.toList()))
 	                    .collect(Collectors.toList());
 	        	
+	        	List<DSummary> DSummaries=new ArrayList<>();
+	        	
 	        	DJIAWkSummaryObservable ob = new DJIAWkSummaryObservable();
 	        	CandleStickObserver cso = new CandleStickObserver();
 	        	ob.addObserver(cso);
 	        	
-	        	DSummary dsum1=new DSummary(csv.get(0).get(0),csv.get(0).get(1),csv.get(0).get(2),csv.get(0).get(3));
-	        	DSummary dsum2=new DSummary(csv.get(1).get(0),csv.get(1).get(1),csv.get(1).get(2),csv.get(1).get(3));
-	        	DSummary dsum3=new DSummary(csv.get(2).get(0),csv.get(2).get(1),csv.get(2).get(2),csv.get(2).get(3));
-	        	DSummary dsum4=new DSummary(csv.get(3).get(0),csv.get(3).get(1),csv.get(3).get(2),csv.get(3).get(3));
-	        	DSummary dsum5=new DSummary(csv.get(4).get(0),csv.get(4).get(1),csv.get(4).get(2),csv.get(4).get(3));
+	        	for(int i=0;i<csv.size();i++) {
+	        		DSummaries.add(new DSummary(csv.get(i).get(0),csv.get(i).get(1),csv.get(i).get(2),csv.get(i).get(3)));
+	        		System.out.println("===Day Summary added===");
+	        		System.out.println("Open:"+DSummaries.get(i).getopen()+"\tHigh:"+DSummaries.get(i).gethigh()+"\tLow:"+DSummaries.get(i).getlow()+"\tClose:"+DSummaries.get(i).getclose());
+	        		
+	        		if (DSummaries.size() == 5) {
+		        		WkSummary wksum = new WkSummary(DSummaries.get(DSummaries.size()-1).getopen(),DSummaries.stream().mapToDouble(summary -> summary.gethigh()).max().orElse(0.0),DSummaries.stream().mapToDouble(summary -> summary.getlow()).min().orElse(0.0),DSummaries.get(0).getclose());
+		        		ob.addSummary(wksum);
+		        		DSummaries.clear();
+		        	}
+	        	}
 	        	
-	        	ob.addSummary(dsum1);
-	        	ob.addSummary(dsum2);
-	        	ob.addSummary(dsum3);
-	        	ob.addSummary(dsum4);
-	        	ob.addSummary(dsum5);
  
 	        } catch (Exception ex) {
 	        	System.out.println("Csv file not Found");        	
