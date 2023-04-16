@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<project name="hw07" basedir="."  default="clean">
+    <property environment="env"/>
+
+    <property name="src" location="src" />
+    <property name="bin" location="bin" />
+
+    <path id="classpath">
+        <pathelement location="bin" />
+    </path>
+
+    <target name="init">
+        <mkdir dir="${bin}"/>
+    </target>
+
+    <target name="compile" depends="init">
+        <javac srcdir="${src}" destdir="${bin}" includeAntRuntime="no">
+            <classpath refid="classpath"/>
+            <include name="edu/umb/cs681/hw07/FileSystem.java"/>
+        </javac>
+    </target>
+
+    <target name="run" depends="compile">
+        <java classname="edu.umb.cs681.hw07.FileSystem"
+              classpathref="classpath"
+              fork="true"/>
+    </target>
+
+    <target name="clean" depends="run">
+        <delete includeemptydirs="true">
+            <fileset dir="${bin}/edu/umb/cs681/hw07" includes="*/"/>
+        </delete>
+    </target>
+
+</project>
