@@ -16,12 +16,12 @@
     <target name="compile" depends="init">
         <javac srcdir="${src}" destdir="${bin}" includeAntRuntime="no">
             <classpath refid="classpath"/>
-            <include name="edu/umb/cs681/hw09/Position.java"/>
+            <include name="edu/umb/cs681/hw09/Aircraft.java"/>
         </javac>
     </target>
 
     <target name="run" depends="compile">
-        <java classname="edu.umb.cs681.hw09.Position"
+        <java classname="edu.umb.cs681.hw09.Aircraft"
               classpathref="classpath"
               fork="true"/>
     </target>
