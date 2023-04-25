@@ -95,11 +95,14 @@ public class FileSystem {
 		
 		for (Thread thread : threads) {
 			thread.interrupt();
+		}
+		
+		for (Thread thread : threads) {
 			try {
 				thread.join();
 			} catch (InterruptedException ex) {
 				ex.printStackTrace();
 			}	
-		}	
+		}
 	}
 }
