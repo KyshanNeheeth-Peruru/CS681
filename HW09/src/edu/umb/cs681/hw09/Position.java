@@ -31,18 +31,4 @@ public record Position(double latitude,double longitude,double altitude) {
     public boolean southOf(Position anotherPosition) {
         return latitude < anotherPosition.latitude();
     }
-    
-    public static void main(String[] args) {
-        Position position = new Position(10,20,30);
-        System.out.println("Positions coordinates before change: "+position.coordinate());
-        Position anotherposition = position.change(25,15,50);
-        System.out.println("Positions coordinates After change: "+position.coordinate());
-        System.out.println("New instances coordinates: "+anotherposition.coordinate());
-        System.out.println("Old position compared to new =====");
-        System.out.println("Higher altitude :"+position.higherAltThan(anotherposition));
-        System.out.println("Lower altitude :"+position.lowerAltThan(anotherposition));
-        System.out.println("North of :"+position.northOf(anotherposition));
-        System.out.println("South of :"+position.southOf(anotherposition));
-    }
-
 }
