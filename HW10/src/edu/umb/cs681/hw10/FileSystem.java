@@ -1,7 +1,9 @@
 package edu.umb.cs681.hw10;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class FileSystem {
@@ -60,38 +62,44 @@ public class FileSystem {
 		
 		FileSystem fs = FileSystem.getFileSystem();
 		fs.addRootDir(root);
+		List<Thread> threads = new ArrayList<>();
 		
-		System.out.println("File system before:");
-        for(FSElement ele:fs.getRootDirs().get(0).getChildren()) {
-            System.out.println(ele.getName());
+		for (int i=0;i<10;i++) {
+            Thread t = new Thread(() -> {
+            	System.out.println("dir Root is directory :"+root.isDirectory());
+            	System.out.println("link e is file :"+e.isFile());
+            	System.out.println("File y is link :"+y.isLink());
+            	System.out.println("y size :"+y.getSize());
+            	System.out.println("a name :"+a.getName());
+            	System.out.println("b name :"+b.getName());
+            });
+            threads.add(t);
+            //t.start();
         }
 		
-		Thread thread1 = new Thread(() -> {
-            FileSystem fs1 = FileSystem.getFileSystem();
-            Directory dir1 = new Directory(null, "t1dir", 0, localTime);
-            fs1.getRootDirs().get(0).appendChild(dir1);
-        });
-
-        Thread thread2 = new Thread(() -> {
-            FileSystem fs2 = FileSystem.getFileSystem();
-            Directory dir2 = new Directory(null, "t2dir", 0, localTime);
-            fs2.getRootDirs().get(0).appendChild(dir2);
-        });
-        
-        thread1.start();
-        thread2.start();
-
-        try {
-            thread1.join();
-            thread2.join();
-        } catch (InterruptedException e1) {
-            e1.printStackTrace();
+		for (int j=0;j<10;j++) {
+            Thread th = new Thread(() -> {
+            	System.out.println("File b is directory :"+b.isDirectory());
+            	System.out.println("File x is file :"+x.isFile());
+            	System.out.println("Link d is link :"+d.isLink());
+            	System.out.println("x size :"+x.getSize());
+            	System.out.println("c name :"+c.getName());
+            });
+            threads.add(th);
+            //th.start();
         }
-        
-        System.out.println("File system after:");
-        for(FSElement ele:fs.getRootDirs().get(0).getChildren()) {
-            System.out.println(ele.getName());
-        }	
+		
+		for (Thread thread : threads) {
+			thread.start();
+		}
+		
+		for (Thread thread : threads) {
+			thread.interrupt();
+			try {
+				thread.join();
+			} catch (InterruptedException ex) {
+				ex.printStackTrace();
+			}	
+		}	
 	}
-
 }
