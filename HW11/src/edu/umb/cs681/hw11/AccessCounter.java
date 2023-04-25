@@ -66,5 +66,6 @@ public class AccessCounter {
 				e.printStackTrace();
 			}
 		 }
+		 System.out.println("Done");
 	}
 }
