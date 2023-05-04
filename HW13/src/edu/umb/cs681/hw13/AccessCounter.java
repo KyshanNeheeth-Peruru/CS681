@@ -1,7 +1,9 @@
 package edu.umb.cs681.hw13;
 
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class AccessCounter {
@@ -50,23 +52,33 @@ public class AccessCounter {
 	}
 	
 	public static void main(String[] args) {
-		 for(int i = 0; i < 10; i++) {
-			 RequestHandler handler = new RequestHandler();
-		     Thread thread = new Thread(handler);
-		     thread.start();
-		     try {
-				 Thread.sleep(1000);
-			 } catch (InterruptedException e) {
-				 e.printStackTrace(); 
-			 }
-		     handler.setdone();
-		     thread.interrupt();
-		     try {
-				thread.join();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		 }
-		 System.out.println("Done");
+		List<Thread> threads = new ArrayList<>();
+		List<RequestHandler> handlers = new ArrayList<>();
+		for(int i=0;i<10;i++) {
+			RequestHandler handler = new RequestHandler();
+			Thread thread = new Thread(handler);
+			thread.start();
+			threads.add(thread);
+			handlers.add(handler);
+		}
+	    try {
+			Thread.sleep(1000);
+		} catch (InterruptedException exception) {
+			exception.printStackTrace();
+		}
+	    for (RequestHandler handler : handlers) {
+	    	handler.setdone();
+	    }
+	    for (Thread thread : threads) {
+	    	thread.interrupt();
+	    }
+	    for (Thread thread : threads) {
+	    	try {
+	    		thread.join();
+	    	} catch (InterruptedException e) {
+	    		e.printStackTrace();
+	    	}
+	    }
+	    System.out.println("Done");
 	}
 }
