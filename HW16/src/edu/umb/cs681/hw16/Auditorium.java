@@ -1,0 +1,94 @@
+package edu.umb.cs681.hw16;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.ReentrantLock;
+
+public class Auditorium {
+	
+	private int capacity = 0;
+	private ReentrantLock lock = new ReentrantLock();
+	private Condition maxCapacity = lock.newCondition();
+	private Condition emptyAudi = lock.newCondition();
+	
+	public void buyTicket(){
+		lock.lock();
+		try{
+			System.out.println(Thread.currentThread().getId() +" (buy) Capacity: "+capacity);
+			while(capacity >= 10){
+				maxCapacity.await();
+			}
+			capacity++;
+			System.out.println(Thread.currentThread().getId() +" (buy): new Capacity: "+capacity);
+			emptyAudi.signalAll();
+		}
+		catch (InterruptedException exception){
+			exception.printStackTrace();
+		}
+		finally{
+			lock.unlock();
+		}
+	}
+	
+	public void cancelTicket(){
+		lock.lock();
+		try{
+			System.out.println(Thread.currentThread().getId() +" (cancel): Capacity: "+capacity);
+			while(capacity <= 0){
+				emptyAudi.await();
+			}
+			capacity--;
+			System.out.println(Thread.currentThread().getId() + " (cancel): new Capacity: "+capacity);
+			maxCapacity.signalAll();
+		}
+		catch (InterruptedException exception){
+			exception.printStackTrace();
+		}
+		finally{
+			lock.unlock();
+		}
+	}
+	
+	public double getCapacity() { 
+		return this.capacity; 
+	}
+	
+	public static void main(String[] args){
+		Auditorium audi = new Auditorium();
+		List<Thread> threads = new ArrayList<>();
+		
+		BuyTicketRunnable buy = new BuyTicketRunnable(audi);
+		CancelTicketRunnable cancel = new CancelTicketRunnable(audi);
+		
+		for(int i = 0; i < 5; i++){
+			threads.add(new Thread(buy));
+			threads.add(new Thread(cancel));
+		}
+		
+		for(Thread t:threads) {
+			t.start();
+		}
+		
+		try {
+	        Thread.sleep(10);
+	    } catch (InterruptedException exception) {
+	    	exception.printStackTrace();
+	    }
+		
+		buy.setDone();
+		cancel.setDone();
+		
+		for(Thread t:threads) {
+	        t.interrupt();
+	    }
+		for(Thread t:threads) {
+	        try {
+	            t.join();
+	        } catch (InterruptedException exception) {
+	        	exception.printStackTrace();
+	        }
+	    }
+		System.out.println("Done");
+	}
+}
