@@ -13,13 +13,16 @@ public class StockQuoteObservable extends Observable<StockEvent> {
 	Map<String, Double> tq = new HashMap<String,Double>();
 	public void changeQuote(String t, double q) {
 		lockTQ.lock();
-		tq.put(t, q);
-		lockTQ.unlock();
-		notifyObservers(new StockEvent(t,q));
+		try {
+			tq.put(t, q);
+			notifyObservers(new StockEvent(t,q));
+		} finally {
+			lockTQ.unlock();
+		}
 	}
 	
 	public static void main(String[] args) {
-		List<Thread> threads = new ArrayList<>();
+List<Thread> threads = new ArrayList<>();
 		
 		StockQuoteObservable observable = new StockQuoteObservable();
 		LineChartObserver lcobs = new LineChartObserver();
@@ -29,18 +32,12 @@ public class StockQuoteObservable extends Observable<StockEvent> {
 		observable.addObserver(obs3D);
 		observable.addObserver(tableobs);
 		
+		Thread1 t1 = new Thread1(observable);
+		Thread2 t2= new Thread2(observable);
+		
 		for(int i=0;i<10;i++) {
-			Thread thread = new Thread(() -> {
-	            for (int j = 0; j < 10; j++) {
-	            	observable.changeQuote("Tick", (int) (Math.random() * 10) + 1);
-	                try {
-	                    Thread.sleep(100);
-	                } catch (InterruptedException e) {
-	                    e.printStackTrace();
-	                }
-	            }
-	        });
-	        threads.add(thread);	
+			threads.add(new Thread(t1));
+			threads.add(new Thread(t2));
 		}
 		
 		for (Thread thread : threads) {
@@ -48,10 +45,13 @@ public class StockQuoteObservable extends Observable<StockEvent> {
 	    }
 		
 		try {
-			Thread.sleep(5000);
+			Thread.sleep(1000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+		
+		t1.setDone();
+		t2.setDone();
 		
 		for (Thread thread : threads) {
 	        thread.interrupt();
