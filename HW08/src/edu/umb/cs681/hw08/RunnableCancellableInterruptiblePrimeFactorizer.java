@@ -10,15 +10,6 @@ public class RunnableCancellableInterruptiblePrimeFactorizer extends RunnableCan
 		super(dividend, from, to);
 	}
 	
-	public void setDone() {
-		lock.lock();
-		try {
-			done = true;
-		} finally {
-			lock.unlock();
-		}	
-	}
-	
 	public void generatePrimeFactors() {
 		long divisor = 2;
 	    while( dividend != 1 && divisor <= to ){
