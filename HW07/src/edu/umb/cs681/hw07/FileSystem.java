@@ -19,6 +19,8 @@ public class FileSystem {
 			lock.unlock();
 		}
 	}
+	
+	private FileSystem() {}
 
 	public LinkedList<Directory> getRootDirs()
 	{
