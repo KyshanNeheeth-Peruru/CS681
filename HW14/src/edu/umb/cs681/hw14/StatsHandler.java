@@ -4,12 +4,20 @@ public class StatsHandler implements Runnable {
 	
 	private AdmissionMonitor monitor;
 	
+	private volatile boolean done = false;
+	
+	public void setDone() {
+		done=true;
+	}
+	
 	public StatsHandler(AdmissionMonitor monitor) {
 		this.monitor = monitor;
 	}
 	
 	public void run() {
-		monitor.countCurrentVisitors();
+		while(!done) {
+			monitor.countCurrentVisitors();
+		}
 	}
 
 }

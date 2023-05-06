@@ -11,7 +11,6 @@ public class AdmissionMonitor {
 	private static ReentrantReadWriteLock rwLock = new ReentrantReadWriteLock();
 	
 	private Condition maxPplCondition = rwLock.writeLock().newCondition();
-	private Condition noPplCondition = rwLock.writeLock().newCondition();
 	
 	public void enter() {
 		rwLock.writeLock().lock();
@@ -22,7 +21,6 @@ public class AdmissionMonitor {
 			}
 			currentVisitors++;
 			System.out.println(Thread.currentThread().getId()+" (After enter): Current visitors: " + currentVisitors);
-			noPplCondition.signalAll();
 		} catch(InterruptedException exception){
 			exception.printStackTrace();
 		} finally {
@@ -34,14 +32,10 @@ public class AdmissionMonitor {
 		rwLock.writeLock().lock();
 		try {
 			System.out.println(Thread.currentThread().getId()+" (Before exit): Current visitors: " + currentVisitors);
-			while(currentVisitors == 0) {
-				noPplCondition.await();
-			}
+
 			currentVisitors--;
 			System.out.println(Thread.currentThread().getId()+" (After exit): Current visitors: " + currentVisitors);
 			maxPplCondition.signalAll();
-		} catch(InterruptedException exception){
-			exception.printStackTrace();
 		} finally {
 			rwLock.writeLock().unlock();
 		}
@@ -60,21 +54,26 @@ public class AdmissionMonitor {
 		AdmissionMonitor monitor = new AdmissionMonitor();
 		List<Thread> threads = new ArrayList<>();
 		
+		EntranceHandler ent = new EntranceHandler(monitor);
+		ExitHandler ext = new ExitHandler(monitor);
+		StatsHandler sta = new StatsHandler(monitor);
+		
 		for(int i=0;i<10;i++) {
-			Thread ent = new Thread(new EntranceHandler(monitor));
-			Thread ext = new Thread(new ExitHandler(monitor));
-			Thread sta = new Thread(new StatsHandler(monitor));
-			threads.add(ent);
-			threads.add(ext);
-			threads.add(sta);
+			threads.add(new Thread(ent));
+			threads.add(new Thread(ext));
+			threads.add(new Thread(sta));
 		}
 		
 		for (Thread thread : threads) {
 			thread.start();
 		}
 		
+		ent.setDone();
+		ext.setDone();
+		sta.setDone();
+		
 		try {
-			Thread.sleep(5000);
+			Thread.sleep(1000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
