@@ -59,7 +59,7 @@ public class RunnableCancellableInterruptiblePrimeFactorizer extends RunnableCan
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		gen.getPrimeFactors().forEach( (Long primefactor)-> System.out.print(primefactor + "is prime factor ") );
+		gen.getPrimeFactors().forEach( (Long primefactor)-> System.out.print(primefactor + " is prime factor. ") );
 	}
 
 }
