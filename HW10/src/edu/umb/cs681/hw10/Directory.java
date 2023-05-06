@@ -2,14 +2,12 @@ package edu.umb.cs681.hw10;
 
 import java.time.LocalDateTime;
 import java.util.LinkedList;
-import java.util.concurrent.locks.ReentrantLock;
 
 public class Directory extends FSElement {	
 	private LinkedList<FSElement> children = new LinkedList<FSElement>();
 	private LinkedList<File> fileList = new LinkedList<File>();
 	private LinkedList<Directory> directoryList = new LinkedList<Directory>();
 	private LinkedList<Link> linkList = new LinkedList<Link>();
-	private ReentrantLock lock = new ReentrantLock();
 	
 	public Directory(Directory parent, String name, int size, LocalDateTime createdTime)
 	{

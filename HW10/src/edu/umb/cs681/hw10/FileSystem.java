@@ -21,6 +21,8 @@ public class FileSystem {
 			lock.unlock();
 		}
 	}
+	
+	private FileSystem() {}
 
 	public LinkedList<Directory> getRootDirs()
 	{
@@ -64,34 +66,26 @@ public class FileSystem {
 		fs.addRootDir(root);
 		List<Thread> threads = new ArrayList<>();
 		
-		for (int i=0;i<10;i++) {
-            Thread t = new Thread(() -> {
-            	System.out.println("dir Root is directory :"+root.isDirectory());
-            	System.out.println("link e is file :"+e.isFile());
-            	System.out.println("File y is link :"+y.isLink());
-            	System.out.println("y size :"+y.getSize());
-            	System.out.println("a name :"+a.getName());
-            	System.out.println("b name :"+b.getName());
-            });
-            threads.add(t);
-            //t.start();
-        }
+		Thread1 t1 = new Thread1(fs);
+		Thread2 t2= new Thread2(fs);
 		
-		for (int j=0;j<10;j++) {
-            Thread th = new Thread(() -> {
-            	System.out.println("File b is directory :"+b.isDirectory());
-            	System.out.println("File x is file :"+x.isFile());
-            	System.out.println("Link d is link :"+d.isLink());
-            	System.out.println("x size :"+x.getSize());
-            	System.out.println("c name :"+c.getName());
-            });
-            threads.add(th);
-            //th.start();
-        }
+		for(int i = 0; i < 5; i++){
+			threads.add(new Thread(t1));
+			threads.add(new Thread(t2));
+		}
 		
 		for (Thread thread : threads) {
 			thread.start();
 		}
+		
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e1) {
+			e1.printStackTrace();
+		}
+		
+		t1.setDone();
+		t2.setDone();
 		
 		for (Thread thread : threads) {
 			thread.interrupt();
@@ -104,5 +98,7 @@ public class FileSystem {
 				ex.printStackTrace();
 			}	
 		}
+		
+		System.out.println("Done");
 	}
 }

@@ -11,7 +11,7 @@ public abstract class FSElement {
 	protected abstract boolean isDirectory();
 	protected abstract boolean isFile();
 	protected abstract boolean isLink();
-	private ReentrantLock lock = new ReentrantLock();
+	protected ReentrantLock lock = new ReentrantLock();
 	
 	public FSElement(Directory parent, String name, int size, LocalDateTime creationTime)
 	{
