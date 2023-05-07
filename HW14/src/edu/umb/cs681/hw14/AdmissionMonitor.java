@@ -21,6 +21,7 @@ public class AdmissionMonitor {
 			}
 			currentVisitors++;
 			System.out.println(Thread.currentThread().getId()+" (After enter): Current visitors: " + currentVisitors);
+
 		} catch(InterruptedException exception){
 			exception.printStackTrace();
 		} finally {
@@ -32,7 +33,7 @@ public class AdmissionMonitor {
 		rwLock.writeLock().lock();
 		try {
 			System.out.println(Thread.currentThread().getId()+" (Before exit): Current visitors: " + currentVisitors);
-
+			
 			currentVisitors--;
 			System.out.println(Thread.currentThread().getId()+" (After exit): Current visitors: " + currentVisitors);
 			maxPplCondition.signalAll();
@@ -54,11 +55,19 @@ public class AdmissionMonitor {
 		AdmissionMonitor monitor = new AdmissionMonitor();
 		List<Thread> threads = new ArrayList<>();
 		
-		EntranceHandler ent = new EntranceHandler(monitor);
-		ExitHandler ext = new ExitHandler(monitor);
-		StatsHandler sta = new StatsHandler(monitor);
+		List<EntranceHandler> entrants = new ArrayList<>();
+		List<ExitHandler> exits = new ArrayList<>();
+		List<StatsHandler> stats = new ArrayList<>();
 		
 		for(int i=0;i<10;i++) {
+			EntranceHandler ent = new EntranceHandler(monitor);
+			ExitHandler ext = new ExitHandler(monitor);
+			StatsHandler sta = new StatsHandler(monitor);
+			
+			entrants.add(ent);
+			exits.add(ext);
+			stats.add(sta);
+			
 			threads.add(new Thread(ent));
 			threads.add(new Thread(ext));
 			threads.add(new Thread(sta));
@@ -68,14 +77,20 @@ public class AdmissionMonitor {
 			thread.start();
 		}
 		
-		ent.setDone();
-		ext.setDone();
-		sta.setDone();
-		
 		try {
 			Thread.sleep(1000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
+		}
+		
+		for (EntranceHandler t : entrants) {
+		    t.setDone();
+		}
+		for (ExitHandler t : exits) {
+		    t.setDone();
+		}
+		for (StatsHandler t : stats) {
+		    t.setDone();
 		}
 		
 		for(Thread t:threads) {

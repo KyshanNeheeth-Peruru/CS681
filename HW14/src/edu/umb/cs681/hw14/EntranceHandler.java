@@ -14,7 +14,7 @@ public class EntranceHandler implements Runnable {
 	}
 	
 	public void run() {
-		while(!done) {
+		if(!done) {
 			monitor.enter();
 		}
 	}

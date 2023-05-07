@@ -14,7 +14,7 @@ public class Thread1 implements Runnable {
 	}
 	
 	public void run() {
-		while(!done) {
+		if(!done) {
 			ob.changeQuote("TickOne", (int)(Math.random()*10) + 1);
 		}
 	}

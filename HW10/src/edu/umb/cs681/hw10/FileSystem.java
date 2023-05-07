@@ -66,10 +66,14 @@ public class FileSystem {
 		fs.addRootDir(root);
 		List<Thread> threads = new ArrayList<>();
 		
-		Thread1 t1 = new Thread1(fs);
-		Thread2 t2= new Thread2(fs);
+		List<Thread1> threads1 = new ArrayList<>();
+		List<Thread2> threads2 = new ArrayList<>();
 		
 		for(int i = 0; i < 5; i++){
+			Thread1 t1 = new Thread1(fs);
+			Thread2 t2= new Thread2(fs);
+			threads1.add(t1);
+			threads2.add(t2);
 			threads.add(new Thread(t1));
 			threads.add(new Thread(t2));
 		}
@@ -80,12 +84,16 @@ public class FileSystem {
 		
 		try {
 			Thread.sleep(1000);
-		} catch (InterruptedException e1) {
-			e1.printStackTrace();
+		} catch (InterruptedException ex) {
+			ex.printStackTrace();
 		}
 		
-		t1.setDone();
-		t2.setDone();
+		for (Thread1 t : threads1) {
+		    t.setDone();
+		}
+		for (Thread2 t : threads2) {
+		    t.setDone();
+		}
 		
 		for (Thread thread : threads) {
 			thread.interrupt();
