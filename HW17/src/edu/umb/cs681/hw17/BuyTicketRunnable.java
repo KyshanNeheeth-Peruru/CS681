@@ -14,10 +14,7 @@ public class BuyTicketRunnable implements Runnable {
 	}
 	
 	public void run() {
-		while(true) {
-			if(done) {
-				break;
-			}
+		if(!done) {
 			audi.buyTicket();
 		}
 	}

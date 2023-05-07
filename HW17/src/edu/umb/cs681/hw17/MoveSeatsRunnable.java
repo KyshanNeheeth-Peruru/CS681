@@ -16,11 +16,8 @@ public class MoveSeatsRunnable implements Runnable {
 	}
 	
 	public void run() {
-		while(true) {
-			if(done) {
-				break;
-			}
-			audi1.moveSeats(audi1,audi2);
+		if(!done) {
+			audi1.moveSeats(audi2);
 		}
 	}
 

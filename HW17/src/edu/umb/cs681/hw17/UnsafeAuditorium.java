@@ -7,7 +7,6 @@ public class UnsafeAuditorium {
 	
 	private int capacity = 0;
 	private ReentrantLock lock = new ReentrantLock();
-	private ReentrantLock newlock = new ReentrantLock();
 	private Condition maxCapacity = lock.newCondition();
 	private Condition emptyAudi = lock.newCondition();
 	
@@ -54,15 +53,16 @@ public class UnsafeAuditorium {
 	}
 	
 	public void moveSeats(UnsafeAuditorium audi1, UnsafeAuditorium audi2) {
+		System.out.println(Thread.currentThread().getId() +" (Move): Capacity: "+getCapacity());
 		lock.lock();
-		newlock.lock();
-		try {
-			audi1.cancelTicket();
-			audi2.buyTicket();
-		} finally {
-			newlock.unlock();
-			lock.unlock();
-		}
+	    try {
+	    	audi2.buyTicket();
+	        cancelTicket();
+	    } finally {
+	        lock.unlock();
+	    }
+	    
+		System.out.println(Thread.currentThread().getId() +" (Move): New Capacity: "+getCapacity());
 		
 	}
 }

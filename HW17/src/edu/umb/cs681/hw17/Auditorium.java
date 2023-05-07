@@ -9,7 +9,6 @@ public class Auditorium {
 	
 	private int capacity = 0;
 	private ReentrantLock lock = new ReentrantLock();
-	private static final ReentrantLock newlock = new ReentrantLock();
 	private Condition maxCapacity = lock.newCondition();
 	private Condition emptyAudi = lock.newCondition();
 	
@@ -18,16 +17,16 @@ public class Auditorium {
 		try{
 			System.out.println(Thread.currentThread().getId() +" (buy) Capacity: "+capacity);
 			while(capacity >= 10){
-				maxCapacity.await();
+				try {
+					maxCapacity.await();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 			}
 			capacity++;
 			System.out.println(Thread.currentThread().getId() +" (buy): new Capacity: "+capacity);
 			emptyAudi.signalAll();
-		}
-		catch (InterruptedException exception){
-			exception.printStackTrace();
-		}
-		finally{
+		} finally{
 			lock.unlock();
 		}
 	}
@@ -37,31 +36,40 @@ public class Auditorium {
 		try{
 			System.out.println(Thread.currentThread().getId() +" (cancel): Capacity: "+capacity);
 			while(capacity <= 0){
-				emptyAudi.await();
+				try {
+					emptyAudi.await();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 			}
 			capacity--;
 			System.out.println(Thread.currentThread().getId() + " (cancel): new Capacity: "+capacity);
 			maxCapacity.signalAll();
-		}
-		catch (InterruptedException exception){
-			System.out.println(" Thread Interrupted");
-		}
-		finally{
+		} finally{
 			lock.unlock();
 		}
 	}
 	
-	public double getCapacity() { 
-		return this.capacity; 
+	public int getCapacity() {
+		lock.lock();
+		try {
+			return this.capacity;
+		} finally {
+			lock.unlock();
+		}
 	}
 	
-	public void moveSeats(Auditorium audi1, Auditorium audi2) {
-		System.out.println(Thread.currentThread().getId() +" (Move): Capacity: "+capacity);
-		synchronized(lock) {
-	        audi1.cancelTicket();
-	        audi2.buyTicket();
+	public void moveSeats(Auditorium audi2) {
+		System.out.println(Thread.currentThread().getId() +" (Move): Capacity: "+getCapacity());
+		cancelTicket();
+		lock.lock();
+	    try {
+	    	audi2.buyTicket();
+	    } finally {
+	        lock.unlock();
 	    }
-		System.out.println(Thread.currentThread().getId() +" (Move): New Capacity: "+capacity);
+	    
+		System.out.println(Thread.currentThread().getId() +" (Move): New Capacity: "+getCapacity());
 		
 	}
 	
@@ -70,11 +78,20 @@ public class Auditorium {
 		Auditorium audi1 = new Auditorium();
 		List<Thread> threads = new ArrayList<>();
 		
-		BuyTicketRunnable buy = new BuyTicketRunnable(audi);
-		CancelTicketRunnable cancel = new CancelTicketRunnable(audi);
-		MoveSeatsRunnable move = new MoveSeatsRunnable(audi,audi1);
+		List<BuyTicketRunnable> buyThreads = new ArrayList<>();
+		List<CancelTicketRunnable> cancelThreads = new ArrayList<>();
+		List<MoveSeatsRunnable> moveThreads = new ArrayList<>();
 		
-		for(int i = 0; i < 5; i++){
+		
+		for(int i = 0; i < 10; i++){
+			BuyTicketRunnable buy = new BuyTicketRunnable(audi);
+			CancelTicketRunnable cancel = new CancelTicketRunnable(audi);
+			MoveSeatsRunnable move = new MoveSeatsRunnable(audi,audi1);
+			
+			buyThreads.add(buy);
+		    cancelThreads.add(cancel);
+		    moveThreads.add(move);
+			
 			threads.add(new Thread(buy));
 			threads.add(new Thread(cancel));
 			threads.add(new Thread(move));
@@ -85,13 +102,20 @@ public class Auditorium {
 		}
 		
 		try {
-	        Thread.sleep(10);
+	        Thread.sleep(1000);
 	    } catch (InterruptedException exception) {
 	    	exception.printStackTrace();
 	    }
 		
-		buy.setDone();
-		cancel.setDone();
+		for (BuyTicketRunnable t : buyThreads) {
+		    t.setDone();
+		}
+		for (CancelTicketRunnable t : cancelThreads) {
+		    t.setDone();
+		}
+		for (MoveSeatsRunnable t : moveThreads) {
+		    t.setDone();
+		}
 		
 		for(Thread t:threads) {
 	        t.interrupt();
