@@ -14,10 +14,7 @@ public class CancelTicketRunnable implements Runnable {
 	}
 	
 	public void run() {
-		while(true) {
-			if(done) {
-				break;
-			}
+		if(!done) {
 			audi.cancelTicket();
 		}
 	}
