@@ -15,7 +15,7 @@ public class StatsHandler implements Runnable {
 	}
 	
 	public void run() {
-		if(!done) {
+		while(!done) {
 			System.out.println(Thread.currentThread().getId()+" Current number of visitors : "+monitor.countCurrentVisitors());
 		}
 	}

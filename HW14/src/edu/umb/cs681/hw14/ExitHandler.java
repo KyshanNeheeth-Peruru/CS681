@@ -14,7 +14,7 @@ public class ExitHandler implements Runnable {
 	}
 	
 	public void run() {
-		if(!done) {
+		while(!done) {
 			monitor.exit();
 		}
 	}
