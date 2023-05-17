@@ -21,6 +21,13 @@ public class Thread1 implements Runnable {
         	System.out.println("y size :"+fs.getRootDirs().get(0).getSubDirectories().get(1).getFiles().get(0).getSize());
         	System.out.println("a name :"+fs.getRootDirs().get(0).getSubDirectories().get(2).getSubDirectories().get(0).getFiles().get(0).getName());
         	System.out.println("b name :"+fs.getRootDirs().get(0).getSubDirectories().get(2).getSubDirectories().get(0).getFiles().get(1).getName());
+        	
+        	try {
+	    		Thread.sleep(1000);
+	    	}catch(InterruptedException e) {
+	    		System.out.println(Thread.currentThread().getId()+" interrupted.");
+	    		return;
+	    	}
 		}
 	}
 

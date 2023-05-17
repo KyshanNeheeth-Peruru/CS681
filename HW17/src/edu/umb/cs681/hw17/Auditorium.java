@@ -20,7 +20,8 @@ public class Auditorium {
 				try {
 					maxCapacity.await();
 				} catch (InterruptedException e) {
-					e.printStackTrace();
+					System.out.println("Thread "+Thread.currentThread().getId()+" interrupted.");
+		    		return;
 				}
 			}
 			capacity++;
@@ -39,7 +40,8 @@ public class Auditorium {
 				try {
 					emptyAudi.await();
 				} catch (InterruptedException e) {
-					e.printStackTrace();
+					System.out.println("Thread "+Thread.currentThread().getId()+" interrupted.");
+		    		return;
 				}
 			}
 			capacity--;
@@ -102,7 +104,7 @@ public class Auditorium {
 		}
 		
 		try {
-	        Thread.sleep(1000);
+	        Thread.sleep(5000);
 	    } catch (InterruptedException exception) {
 	    	exception.printStackTrace();
 	    }

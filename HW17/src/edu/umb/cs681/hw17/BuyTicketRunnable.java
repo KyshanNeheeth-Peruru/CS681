@@ -17,6 +17,12 @@ public class BuyTicketRunnable implements Runnable {
 		if(!done) {
 			audi.buyTicket();
 		}
+		try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+        	System.out.println("Thread "+Thread.currentThread().getId()+" interrupted.");
+    		return;
+        }
 	}
 
 }

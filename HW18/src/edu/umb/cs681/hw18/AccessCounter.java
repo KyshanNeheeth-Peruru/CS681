@@ -4,17 +4,24 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.locks.ReentrantLock;
+
 
 public class AccessCounter {
 	
 	private static AccessCounter instance = null;
-	
+	private static ReentrantLock slock = new ReentrantLock();
 	private ConcurrentHashMap<Path, Integer> accessCountMap = new ConcurrentHashMap<>();
 	
 	public static AccessCounter getInstance() {
+		slock.lock();
+		try {
 		if (instance == null)
 			instance = new AccessCounter();
 		return instance;
+		} finally {
+			slock.unlock();
+		}
     }
 	
 	public void increment(Path path) {
@@ -36,7 +43,7 @@ public class AccessCounter {
 			handlers.add(handler);
 		}
 	    try {
-			Thread.sleep(1000);
+			Thread.sleep(3000);
 		} catch (InterruptedException exception) {
 			exception.printStackTrace();
 		}

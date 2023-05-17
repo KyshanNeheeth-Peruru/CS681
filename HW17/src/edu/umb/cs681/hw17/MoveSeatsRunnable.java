@@ -19,6 +19,12 @@ public class MoveSeatsRunnable implements Runnable {
 		if(!done) {
 			audi1.moveSeats(audi2);
 		}
+		try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+        	System.out.println("Thread "+Thread.currentThread().getId()+" interrupted.");
+    		return;
+        }
 	}
 
 }

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class AccessCounter {
+	private AccessCounter() {}
 	private static AccessCounter instance = null;
 	private HashMap<Path, Integer> accessCountMap = new HashMap<>();
 	private static ReentrantReadWriteLock rwLock = new ReentrantReadWriteLock();
@@ -16,7 +17,7 @@ public class AccessCounter {
 		try {
 		if (instance == null)
 			instance = new AccessCounter();
-			return instance;
+		return instance;
 		} finally {
 			rwLock.readLock().unlock();
 		}
@@ -62,7 +63,7 @@ public class AccessCounter {
 			handlers.add(handler);
 		}
 	    try {
-			Thread.sleep(1000);
+			Thread.sleep(5000);
 		} catch (InterruptedException exception) {
 			exception.printStackTrace();
 		}

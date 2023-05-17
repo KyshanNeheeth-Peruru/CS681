@@ -16,6 +16,12 @@ public class ExitHandler implements Runnable {
 	public void run() {
 		while(!done) {
 			monitor.exit();
+			try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+            	System.out.println("Thread "+Thread.currentThread().getId()+" interrupted.");
+	    		return;
+            }
 		}
 	}
 

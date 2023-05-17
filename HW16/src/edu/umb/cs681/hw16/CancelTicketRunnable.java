@@ -17,6 +17,12 @@ public class CancelTicketRunnable implements Runnable {
 		if(!done) {
 			audi.cancelTicket();
 		}
+		try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+        	System.out.println("Thread "+Thread.currentThread().getId()+" interrupted.");
+    		return;
+        }
 	}
 
 }

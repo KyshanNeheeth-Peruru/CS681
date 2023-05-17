@@ -27,7 +27,8 @@ public class ThreadSafeBankAccount2 {
 			sufficientFundsCondition.signalAll();
 		}
 		catch (InterruptedException exception){
-			exception.printStackTrace();
+			System.out.println("Thread "+Thread.currentThread().getId()+" interrupted");
+			return;
 		}
 		finally{
 			lock.unlock();
@@ -52,7 +53,8 @@ public class ThreadSafeBankAccount2 {
 			belowUpperLimitFundsCondition.signalAll();
 		}
 		catch (InterruptedException exception){
-			exception.printStackTrace();
+			System.out.println("Thread "+Thread.currentThread().getId()+" interrupted");
+			return;
 		}
 		finally{
 			lock.unlock();
@@ -78,7 +80,7 @@ public class ThreadSafeBankAccount2 {
 		}
 		
 		try {
-	        Thread.sleep(10);
+	        Thread.sleep(5000);
 	    } catch (InterruptedException exception) {
 	    	exception.printStackTrace();
 	    }
@@ -87,7 +89,7 @@ public class ThreadSafeBankAccount2 {
 		withdrawRunnable.setDone();
 
 	    for(Thread t:threads) {
-	        t.interrupt();
+	    	t.interrupt();
 	    }
 
 	    for(Thread t:threads) {

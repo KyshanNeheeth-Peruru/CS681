@@ -17,17 +17,17 @@ public class RequestHandler implements Runnable {
 	}
 	public void run() {
 		Random rand = new Random();
-		while (!isdone()) {
+		while(!isdone()) {
 			char fileName = (char)(rand.nextInt(4)+'a');
 			Path path = Paths.get(fileName+".html");
             accessCounter.increment(path);
             int count = accessCounter.getCount(path);
-            System.out.println("Thread "+Thread.currentThread().getId()+" accessed "+path+" "+count+" times.");
+            System.out.println("Thread "+Thread.currentThread().getId()+": "+path+" was accessed total of "+count+" times.");
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
-            	System.out.println("Thread "+Thread.currentThread().getId()+" interrupted");
-                break;
+            	System.out.println("Thread "+Thread.currentThread().getId()+" interrupted.");
+	    		return;
             }
         }
 	}

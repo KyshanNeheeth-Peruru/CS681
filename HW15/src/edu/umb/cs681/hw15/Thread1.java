@@ -14,8 +14,14 @@ public class Thread1 implements Runnable {
 	}
 	
 	public void run() {
-		if(!done) {
+		while(!done) {
 			ob.changeQuote("TickOne", (int)(Math.random()*10) + 1);
+			try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+            	System.out.println("Thread "+Thread.currentThread().getId()+" interrupted.");
+	    		return;
+            }
 		}
 	}
 }

@@ -14,11 +14,14 @@ public class DepositRunnable implements Runnable {
 	}
 
 	public void run() {
-		while(true) {
-			if(done) {
-				break;
-			}
+		while(!done) {
 			account.deposit(100);
+			try {
+				Thread.sleep(500);
+			} catch(InterruptedException exception) {
+				System.out.println("Thread "+Thread.currentThread().getId()+" interrupted");
+				return;
+			}
 		}    
     }
 

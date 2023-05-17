@@ -14,11 +14,14 @@ public class WithdrawRunnable implements Runnable {
 	}
 
 	public void run() {
-		while(true) {
-			if(done) {
-				break;
-			}
+		while(!done) {
 			account.withdraw(100);
+			try {
+				Thread.sleep(500);
+			} catch(InterruptedException exception) {
+				System.out.println("Thread "+Thread.currentThread().getId()+" interrupted");
+				return;
+			}
 		}
     }
 

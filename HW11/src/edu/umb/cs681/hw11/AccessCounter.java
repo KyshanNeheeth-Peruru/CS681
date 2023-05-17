@@ -17,11 +17,13 @@ public class AccessCounter {
 		try {
 		if (instance == null)
 			instance = new AccessCounter();
-			return instance;
+		return instance;
 		} finally {
 			slock.unlock();
 		}
     }
+	
+	private AccessCounter() {}
 	
 	public void increment(Path path) {
 		lock.lock();
@@ -63,7 +65,7 @@ public class AccessCounter {
 			handlers.add(handler);
 		}
 	    try {
-			Thread.sleep(1000);
+			Thread.sleep(5000);
 		} catch (InterruptedException exception) {
 			exception.printStackTrace();
 		}

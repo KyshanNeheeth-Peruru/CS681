@@ -112,32 +112,17 @@ public class Directory extends FSElement {
 	
 	public boolean isDirectory()
 	{
-		lock.lock();
-		try {
-			return true;
-		} finally {
-			lock.unlock();
-		}
+		return true;
 	}
 	
 	public  boolean isFile()
 	{
-		lock.lock();
-		try {
-			return false;
-		} finally {
-			lock.unlock();
-		}
+		return false;
 	}
 	
 	public boolean isLink()
 	{
-		lock.lock();
-		try {
-			return false;
-		} finally {
-			lock.unlock();
-		}
+		return false;
 	}
 
 }

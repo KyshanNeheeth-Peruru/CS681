@@ -20,6 +20,13 @@ public class Thread2 implements Runnable {
         	System.out.println("Link d is link :"+fs.getRootDirs().get(0).getChildren().get(3).isLink());
         	System.out.println("x size :"+fs.getRootDirs().get(0).getSubDirectories().get(0).getFiles().get(0).getSize());
         	System.out.println("c name :"+fs.getRootDirs().get(0).getSubDirectories().get(2).getFiles().get(0).getName());
+        	
+        	try {
+	    		Thread.sleep(1000);
+	    	}catch(InterruptedException e) {
+	    		System.out.println(Thread.currentThread().getId()+" interrupted.");
+	    		return;
+	    	}
 		}
 	}
 

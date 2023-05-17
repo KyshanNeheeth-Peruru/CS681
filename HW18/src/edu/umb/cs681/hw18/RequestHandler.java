@@ -26,14 +26,14 @@ public class RequestHandler implements Runnable {
 			Path path = Paths.get(fileName+".html");
             accessCounter.increment(path);
             int count = accessCounter.getCount(path);
-            System.out.println("Thread "+Thread.currentThread().getId()+" accessed "+path+" "+count+" times.");
+            System.out.println("Thread "+Thread.currentThread().getId()+": "+path+" was accessed total of "+count+" times.");
 			}finally {
 				lock.unlock();
 			}
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
-            	System.out.println("Thread "+Thread.currentThread().getId()+" interrupted");
+            	System.out.println("Thread "+Thread.currentThread().getId()+" interrupted.");
                 break;
             }
         }

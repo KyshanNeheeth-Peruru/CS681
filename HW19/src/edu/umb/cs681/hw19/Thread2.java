@@ -16,6 +16,12 @@ public class Thread2 implements Runnable {
 	public void run() {
 		while(!done) {
 			ob.changeQuote("TickTwo", (int)(Math.random()*10) + 1);
+			try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+            	System.out.println(Thread.currentThread().getId()+" interrupted.");
+	    		return;
+            }
 		}
 	}
 
